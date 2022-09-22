@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
   enabled         = true
   is_ipv6_enabled = true
 
-  default_root_object = "index.html"
+  default_root_object = var.default_root_object
   aliases             = var.origins
 
   origin {
