@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create release
-        uses: rymndhng/release-on-push-action@v0.23.1
+        uses: rymndhng/release-on-push-action@v0.25.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
