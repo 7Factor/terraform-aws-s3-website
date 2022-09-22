@@ -35,29 +35,39 @@ resource "aws_s3_bucket_cors_configuration" "web_cors_configuration" {
 
 resource "aws_s3_bucket_policy" "web_policy" {
   bucket = aws_s3_bucket.web.id
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "${aws_cloudfront_origin_access_identity.access_id.iam_arn}"
-            },
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::${var.primary_fqdn}/*"
-        },
-        {
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "${aws_cloudfront_origin_access_identity.access_id.iam_arn}"
-            },
-            "Action": "s3:ListBucket",
-            "Resource": "arn:aws:s3:::${var.primary_fqdn}"
-        }
-    ]
+  policy = data.aws_iam_policy_document.web_policy_document.json
 }
-EOF
+
+data "aws_iam_policy_document" "web_policy_document" {
+  version = "2012-10-17"
+
+  statement {
+    sid    = ""
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.access_id.iam_arn]
+    }
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.primary_fqdn}/*"
+    ]
+  }
+
+  statement {
+    sid = ""
+    effect = "Allow"
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.access_id.iam_arn]
+    }
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      "arn:aws:s3:::${var.primary_fqdn}"
+    ]
+  }
 }
