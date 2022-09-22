@@ -1,0 +1,20 @@
+name: Create Release Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release_on_push:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create release
+        uses: rymndhng/release-on-push-action@v0.23.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          bump_version_scheme: norelease
+          tag_prefix: v
+          release_name: "Release <RELEASE_VERSION>"
