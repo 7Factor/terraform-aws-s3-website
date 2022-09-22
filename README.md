@@ -56,19 +56,3 @@ what this looks like together.
 **Major version 1 is intended to maintain backwards compatibility with the old module source.** To use the new module
 source and maintain compatibility, set your version to `"~> 1"`. This means you will receive any updates that are
 backwards compatible with the old module.
-
-## Contributing
-
-We welcome pull requests for bug fixes and new functionality. Because we use an automated release system, your PR must 
-include a label indicating what type of release should be associated with your change. As is standard for terraform
-registry modules, we utilize [Semantic Versioning](https://semver.org/) for our version numbers. The following are the 
-labels that should be used on your PRs:
-
-* https://github.com/7Factor/terraform-aws-s3-website/labels/release%3Amajor - A release for a major version will be 
-  created after merging the PR.
-* https://github.com/7Factor/terraform-aws-s3-website/labels/release%3Aminor - A release for a minor version will be
-  created after merging the PR.
-* https://github.com/7Factor/terraform-aws-s3-website/labels/release%3Apatch - A release for a patch version will be
-  created after merging the PR.
-* https://github.com/7Factor/terraform-aws-s3-website/labels/no%20release - No release will be created after merging
-  the PR.
