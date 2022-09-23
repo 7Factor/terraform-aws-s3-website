@@ -12,10 +12,6 @@ variable "s3_origin_id" {
   description = "A unique name value to assign to the s3 origin in CF. Try not to change it much."
 }
 
-variable "forward_query_strings" {
-  description = "Should we forward query strings?"
-}
-
 variable "cert_arn" {
   description = "The ARN for a cert that will be fronting this distro. Make sure it exists."
 }
@@ -58,32 +54,6 @@ variable "custom_error_responses" {
   default     = []
 }
 
-variable "forward_cookies" {
-  description = "What cookie forwarding policy should we use? Check the docs in terraform for info on this."
-  default     = "none"
-}
-
-variable "whitelisted_cookie_names" {
-  type        = list(string)
-  description = "A list of cookies to whitelist."
-  default     = []
-}
-
-variable "origin_min_ttl" {
-  description = "Origin min TTL."
-  default     = 0
-}
-
-variable "origin_default_ttl" {
-  description = "Origin default TTL."
-  default     = 3600
-}
-
-variable "origin_max_ttl" {
-  description = "Origin max TTL."
-  default     = 86400
-}
-
 variable "restriction_type" {
   description = "The restriction type for the CF distro when restricting content. Defaults to none."
   default     = "none"
@@ -95,14 +65,57 @@ variable "restriction_locations" {
   default     = []
 }
 
-# lambda_function_association config
+variable "default_cache_behavior" {
+  description = "The default cache behavior for this distribute. See the modules/cache_behavior submodule for a simple way to create this."
+  type = object({
+    allowed_methods          = optional(list(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods           = optional(list(string), ["GET", "HEAD"])
+    viewer_protocol_policy   = optional(string, "redirect-to-https")
+    compress                 = optional(bool, false)
+    min_ttl                  = optional(number, 1)
+    default_ttl              = optional(number, 3600)
+    max_ttl                  = optional(number, 86400)
+    forward_query_strings    = optional(bool, true)
+    query_string_cache_keys  = optional(list(string), [])
+    forward_cookies          = optional(string, "none")
+    whitelisted_cookie_names = optional(list(string), [])
+    lambda_function_associations = optional(list(object({
+      event_type   = string
+      lambda_arn   = string
+      include_body = optional(bool, false)
+    })), [])
+    function_associations = optional(list(object({
+      event_type   = string
+      function_arn = string
+    })), [])
+  })
+  default = {}
+}
 
-variable "lambda_function_associations" {
-  default     = []
-  description = "A list of lambda function associations for ordered cache behavior"
+variable "ordered_cache_behaviors" {
+  description = "An ordered list of cache behaviors for this distribution. List from top to bottom in order or precedence. The topmost cache behavior will have precedence 0. See the modules/cache_behavior submodule for a simple way to create this."
   type = list(object({
-    event_type   = string
-    include_body = bool
-    lambda_arn   = string
+    path_pattern             = string
+    allowed_methods          = optional(list(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods           = optional(list(string), ["GET", "HEAD"])
+    viewer_protocol_policy   = optional(string, "redirect-to-https")
+    compress                 = optional(bool, false)
+    min_ttl                  = optional(number, 1)
+    default_ttl              = optional(number, 3600)
+    max_ttl                  = optional(number, 86400)
+    forward_query_strings    = optional(bool, true)
+    query_string_cache_keys  = optional(list(string), [])
+    forward_cookies          = optional(string, "none")
+    whitelisted_cookie_names = optional(list(string), [])
+    lambda_function_associations = optional(list(object({
+      event_type   = string
+      lambda_arn   = string
+      include_body = optional(bool, false)
+    })), [])
+    function_associations = optional(list(object({
+      event_type   = string
+      function_arn = string
+    })), [])
   }))
+  default = []
 }

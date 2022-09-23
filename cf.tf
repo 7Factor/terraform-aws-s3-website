@@ -24,33 +24,87 @@ resource "aws_cloudfront_distribution" "web_distro" {
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
-    cached_methods         = ["GET", "HEAD"]
+    allowed_methods        = var.default_cache_behavior.allowed_methods
+    cached_methods         = var.default_cache_behavior.cached_methods
     target_origin_id       = var.s3_origin_id
-    viewer_protocol_policy = "redirect-to-https"
+    viewer_protocol_policy = var.default_cache_behavior.viewer_protocol_policy
 
     forwarded_values {
-      query_string = var.forward_query_strings
+      query_string = var.default_cache_behavior.forward_query_strings
 
       cookies {
-        forward           = var.forward_cookies
-        whitelisted_names = var.whitelisted_cookie_names
+        forward           = var.default_cache_behavior.forward_cookies
+        whitelisted_names = var.default_cache_behavior.whitelisted_cookie_names
       }
     }
 
     dynamic "lambda_function_association" {
-      for_each = var.lambda_function_associations
+      for_each = var.default_cache_behavior.lambda_function_associations
 
       content {
-        event_type   = lambda_function_association.value["event_type"]
-        include_body = lambda_function_association.value["include_body"]
-        lambda_arn   = lambda_function_association.value["lambda_arn"]
+        event_type   = lambda_function_association.value.event_type
+        include_body = lambda_function_association.value.include_body
+        lambda_arn   = lambda_function_association.value.lambda_arn
       }
     }
 
-    min_ttl     = var.origin_min_ttl
-    default_ttl = var.origin_default_ttl
-    max_ttl     = var.origin_max_ttl
+    dynamic "function_association" {
+      for_each = var.default_cache_behavior.function_associations
+
+      content {
+        event_type   = function_association.value.event_type
+        function_arn = function_association.value.function_arn
+      }
+    }
+
+    min_ttl     = var.default_cache_behavior.min_ttl
+    default_ttl = var.default_cache_behavior.default_ttl
+    max_ttl     = var.default_cache_behavior.max_ttl
+  }
+
+  dynamic "ordered_cache_behavior" {
+    for_each = var.ordered_cache_behaviors
+
+    content {
+      path_pattern = ordered_cache_behavior.value.path_pattern
+
+      allowed_methods        = ordered_cache_behavior.value.allowed_methods
+      cached_methods         = ordered_cache_behavior.value.cached_methods
+      target_origin_id       = var.s3_origin_id
+      viewer_protocol_policy = ordered_cache_behavior.value.viewer_protocol_policy
+
+      forwarded_values {
+        query_string = ordered_cache_behavior.value.forward_query_strings
+
+        cookies {
+          forward           = ordered_cache_behavior.value.forward_cookies
+          whitelisted_names = ordered_cache_behavior.value.whitelisted_cookie_names
+        }
+      }
+
+      dynamic "lambda_function_association" {
+        for_each = ordered_cache_behavior.value.lambda_function_associations
+
+        content {
+          event_type   = lambda_function_association.value.event_type
+          include_body = lambda_function_association.value.include_body
+          lambda_arn   = lambda_function_association.value.lambda_arn
+        }
+      }
+
+      dynamic "function_association" {
+        for_each = ordered_cache_behavior.value.function_associations
+
+        content {
+          event_type   = function_association.value.event_type
+          function_arn = function_association.value.function_arn
+        }
+      }
+
+      min_ttl     = ordered_cache_behavior.value.min_ttl
+      default_ttl = ordered_cache_behavior.value.default_ttl
+      max_ttl     = ordered_cache_behavior.value.max_ttl
+    }
   }
 
   dynamic "custom_error_response" {
