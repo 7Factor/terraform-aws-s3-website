@@ -14,18 +14,31 @@ before. Once you're good, import this module and pass the appropriate variables.
 ## Example Usage
 
 ```hcl-terraform
+module "default_cache_behavior" {
+  source  = "7Factor/s3-website/aws//modules/cache_behavior"
+  version = "~> 2"
+  
+  compress = true
+}
+
+module "root_path_cache_behavior" {
+  source  = "7Factor/s3-website/aws//modules/cache_behavior"
+  version = "~> 2"
+  
+  path_pattern = "/"
+  min_ttl      = 0
+  default_ttl  = 0
+  max_ttl      = 0
+}
+
 module "terraform-s3-website" {
-  source = "7Factor/s3-website/aws"
-  version = "~> 1"
+  source  = "7Factor/s3-website/aws"
+  version = "~> 2"
 
   s3_origin_id          = "mywebsite.com"
   cert_arn              = "arn:aws:acm:us-east-1:751713827483:certificate/ed5145d0-ada4-4e0f-8184-436b73a2935c"
   primary_fqdn          = "mywebsite.com"
   origins               = ["mywebsite.com", "www.mywebsite.com"]
-  forward_query_strings = true
-  origin_min_ttl        = 0
-  origin_default_ttl    = 86400
-  origin_max_ttl        = 31536000
   web_error_doc         = "index.html"
 
   custom_error_responses = [
@@ -36,6 +49,9 @@ module "terraform-s3-website" {
       response_page_path    = "/index.html"
     },
   ]
+  
+  default_cache_behavior = module.default_cache_behavior
+  ordered_cache_behaviors = [module.root_path_cache_behavior]
 }
 ```
 

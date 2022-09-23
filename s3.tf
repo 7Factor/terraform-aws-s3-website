@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "web_policy_document" {
   }
 
   statement {
-    sid = ""
+    sid    = ""
     effect = "Allow"
     principals {
       type        = "AWS"

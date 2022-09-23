@@ -17,4 +17,3 @@ output "s3_bucket_name" {
   description = "The name of the bucket. Probably the same as the FQDN, but this so you're 100% sure to get the name."
   value       = aws_s3_bucket.web.bucket
 }
-
