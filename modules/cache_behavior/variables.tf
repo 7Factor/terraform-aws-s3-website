@@ -49,7 +49,7 @@ variable "compress" {
 variable "min_ttl" {
   description = "The minimum amount of time (in seconds) that you want objects to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated."
   type        = number
-  default     = 0
+  default     = 1
 }
 
 variable "default_ttl" {
