@@ -7,6 +7,11 @@ resource "aws_s3_bucket_acl" "web_acl" {
   acl    = "public-read"
 }
 
+resource "aws_s3_bucket_public_access_block" "allow_public_acl" {
+  bucket            = aws_s3_bucket.web.id
+  block_public_acls = false
+}
+
 resource "aws_s3_bucket_website_configuration" "web_site_configuration" {
   bucket = aws_s3_bucket.web.id
 
