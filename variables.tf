@@ -79,6 +79,7 @@ variable "default_cache_behavior" {
     query_string_cache_keys  = optional(list(string), [])
     forward_cookies          = optional(string, "none")
     whitelisted_cookie_names = optional(list(string), [])
+    forward_headers          = optional(list(string), [])
     lambda_function_associations = optional(list(object({
       event_type   = string
       lambda_arn   = string
@@ -107,6 +108,7 @@ variable "ordered_cache_behaviors" {
     query_string_cache_keys  = optional(list(string), [])
     forward_cookies          = optional(string, "none")
     whitelisted_cookie_names = optional(list(string), [])
+    forward_headers          = optional(list(string), [])
     lambda_function_associations = optional(list(object({
       event_type   = string
       lambda_arn   = string

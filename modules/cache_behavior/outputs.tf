@@ -46,6 +46,10 @@ output "whitelisted_cookie_names" {
   value = var.whitelisted_cookie_names
 }
 
+output "forward_headers" {
+  value = var.forward_headers
+}
+
 output "lambda_function_associations" {
   value = var.lambda_function_associations
 }
