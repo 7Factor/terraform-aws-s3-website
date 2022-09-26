@@ -31,6 +31,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
 
     forwarded_values {
       query_string = var.default_cache_behavior.forward_query_strings
+      headers      = var.default_cache_behavior.forward_headers
 
       cookies {
         forward           = var.default_cache_behavior.forward_cookies
@@ -75,6 +76,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
 
       forwarded_values {
         query_string = ordered_cache_behavior.value.forward_query_strings
+        headers      = ordered_cache_behavior.value.forward_headers
 
         cookies {
           forward           = ordered_cache_behavior.value.forward_cookies

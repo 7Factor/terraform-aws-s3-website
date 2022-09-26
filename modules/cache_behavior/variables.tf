@@ -93,6 +93,12 @@ variable "whitelisted_cookie_names" {
   default     = []
 }
 
+variable "forward_headers" {
+  description = "Headers, if any, that you want CloudFront to vary upon for this cache behavior. Specify \"*\" to include all headers."
+  type        = list(string)
+  default     = []
+}
+
 variable "lambda_function_associations" {
   description = "A list of lambda function associations for cache behaviors (max 4)"
   type = list(object({
