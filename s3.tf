@@ -5,6 +5,8 @@ resource "aws_s3_bucket" "web" {
 resource "aws_s3_bucket_acl" "web_acl" {
   bucket = aws_s3_bucket.web.id
   acl    = "public-read"
+
+  depends_on = [aws_s3_bucket_public_access_block.allow_public_acl]
 }
 
 resource "aws_s3_bucket_public_access_block" "allow_public_acl" {
