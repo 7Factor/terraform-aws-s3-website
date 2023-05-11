@@ -2,11 +2,18 @@ resource "aws_s3_bucket" "web" {
   bucket = var.primary_fqdn
 }
 
+resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
+  bucket = aws_s3_bucket.web.id
+  rule {
+    object_ownership = var.bucket_object_ownership
+  }
+}
+
 resource "aws_s3_bucket_acl" "web_acl" {
   bucket = aws_s3_bucket.web.id
   acl    = "public-read"
 
-  depends_on = [aws_s3_bucket_public_access_block.allow_public_acl]
+  depends_on = [aws_s3_bucket_public_access_block.allow_public_acl, aws_s3_bucket_ownership_controls]
 }
 
 resource "aws_s3_bucket_public_access_block" "allow_public_acl" {
