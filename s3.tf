@@ -1,5 +1,7 @@
 resource "aws_s3_bucket" "web" {
   bucket = var.primary_fqdn
+
+  force_destroy = var.allow_destroy_s3
 }
 
 resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {

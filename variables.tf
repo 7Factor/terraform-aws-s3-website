@@ -126,3 +126,9 @@ variable "bucket_object_ownership" {
   description = "See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls#object_ownership : BucketOwnerPreferred, ObjectWriter or BucketOwnerEnforced. Defaults to ObjectWriter."
   default     = "ObjectWriter"
 }
+
+variable "allow_destroy_s3" {
+  description = "Allow the S3 bucket to be destroyed even when not empty. Defaults to false."
+  type        = bool
+  default     = false
+}
