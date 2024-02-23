@@ -61,6 +61,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
     min_ttl     = var.default_cache_behavior.min_ttl
     default_ttl = var.default_cache_behavior.default_ttl
     max_ttl     = var.default_cache_behavior.max_ttl
+    compress    = var.default_cache_behavior.compress
   }
 
   dynamic "ordered_cache_behavior" {
@@ -106,6 +107,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
       min_ttl     = ordered_cache_behavior.value.min_ttl
       default_ttl = ordered_cache_behavior.value.default_ttl
       max_ttl     = ordered_cache_behavior.value.max_ttl
+      compress    = ordered_cache_behavior.value.compress
     }
   }
 
