@@ -12,20 +12,25 @@ variable "s3_origin_id" {
   description = "A unique name value to assign to the s3 origin in CF. Try not to change it much."
 }
 
-variable "cert_arn" {
-  description = "The ARN for a cert that will be fronting this distro. Make sure it exists."
-  type        = string
-  default     = null
-}
 
-variable "route53" {
+variable "host_management" {
   description = "If the module should create a new cert for the distribution. Fill out the below information."
-  default     = null
+  default = {
+    route53  = null
+    cert_arn = null
+  }
   type = object({
-    record_name = string
-    zone_name   = string
-    create_cert = bool
+    route53 = object({
+      record_name = string
+      zone_name   = string
+    })
+    cert_arn = optional(string)
   })
+
+  validation {
+    condition     = var.host_management.route53 != null || var.host_management.cert_arn != null
+    error_message = "You must provide a cert_arn if route53.create_cert is false."
+  }
 }
 
 variable "create_cert" {

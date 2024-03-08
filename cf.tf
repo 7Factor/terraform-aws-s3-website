@@ -3,8 +3,8 @@ resource "aws_cloudfront_origin_access_identity" "access_id" {
 }
 
 locals {
-  should_create_cert = var.route53 != null && var.route53.create_cert
-  cert_arn           = local.should_create_cert ? module.acm[0].acm_certificate_arn : var.cert_arn
+  should_create_cert = var.host_management.route53 != null && var.host_management.cert_arn == null
+  cert_arn           = local.should_create_cert ? module.acm[0].acm_certificate_arn : var.host_management.cert_arn
 }
 
 resource "aws_cloudfront_distribution" "web_distro" {
@@ -20,13 +20,6 @@ resource "aws_cloudfront_distribution" "web_distro" {
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.access_id.cloudfront_access_identity_path
-    }
-  }
-
-  lifecycle {
-    precondition {
-      condition     = (var.route53 == null || var.route53.create_cert == false) && var.cert_arn == null
-      error_message = "You must provide a cert_arn if route53.create_cert is false."
     }
   }
 

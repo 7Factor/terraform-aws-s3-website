@@ -1,11 +1,11 @@
 data "aws_route53_zone" "root_zone" {
-  name = var.route53.zone_name
+  name = var.host_management.route53.zone_name
 }
 
 resource "aws_route53_record" "a_record" {
-  count   = var.route53 ? 1 : 0
+  count   = var.host_management.route53 ? 1 : 0
   type    = "A"
-  name    = var.route53.record_name
+  name    = var.host_management.route53.record_name
   zone_id = data.aws_route53_zone.root_zone.zone_id
 
   alias {
