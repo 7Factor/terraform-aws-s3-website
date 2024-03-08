@@ -4,7 +4,6 @@ resource "aws_cloudfront_origin_access_identity" "access_id" {
 
 locals {
   should_create_cert = var.host_management.route53 != null && var.host_management.cert_arn == null
-  cert_arn           = local.should_create_cert ? one(module.acm[*].acm_certificate_arn) : var.host_management.cert_arn
 }
 
 resource "aws_cloudfront_distribution" "web_distro" {
@@ -26,7 +25,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = local.cert_arn
+    acm_certificate_arn = local.should_create_cert ? one(module.acm[*].acm_certificate_arn) : var.host_management.cert_arn
     ssl_support_method  = "sni-only"
   }
 
