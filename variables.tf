@@ -20,16 +20,16 @@ variable "host_management" {
     cert_arn = null
   }
   type = object({
-    route53 = object({
+    route53 = optional(object({
       record_name = string
       zone_name   = string
-    })
+    }))
     cert_arn = optional(string)
   })
 
   validation {
     condition     = var.host_management.route53 != null || var.host_management.cert_arn != null
-    error_message = "You must provide a cert_arn if route53.create_cert is false."
+    error_message = "You must provide a host_management.cert_arn if host_management.route53 is not provided."
   }
 }
 
