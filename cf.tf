@@ -8,6 +8,8 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "web_distro" {
+  depends_on = local.should_create_cert ? [module.acm] : []
+
   enabled         = true
   is_ipv6_enabled = true
 
