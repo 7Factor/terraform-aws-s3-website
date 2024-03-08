@@ -3,7 +3,7 @@ data "aws_route53_zone" "root_zone" {
 }
 
 resource "aws_route53_record" "a_record" {
-  count   = var.host_management.route53 ? 1 : 0
+  count   = var.host_management.route53 == null ? 1 : 0
   type    = "A"
   name    = var.host_management.route53.record_name
   zone_id = data.aws_route53_zone.root_zone.zone_id
