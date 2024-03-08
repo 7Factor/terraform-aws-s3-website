@@ -16,22 +16,6 @@ variable "cert_arn" {
   description = "The ARN for a cert that will be fronting this distro. Make sure it exists."
 }
 
-variable "route53" {
-  description = "If the module should create a new cert for the distribution. Fill out the below information."
-  default     = null
-  type = object({
-    record_name = string
-    zone_name   = string
-    create_cert = bool
-  })
-}
-
-variable "create_cert" {
-  description = "If the module should create a new cert for the distribution. Fill out the below information."
-  default     = false
-  type        = bool
-}
-
 # Optional variables
 variable "routing_rules" {
   description = "A string containing a compatible policy document with routing rules to assign to the S3 bucket. Defaults to empty."

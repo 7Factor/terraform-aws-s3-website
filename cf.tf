@@ -2,11 +2,6 @@ resource "aws_cloudfront_origin_access_identity" "access_id" {
   comment = "Created to facilitate CF access to ${var.primary_fqdn} and the corresponding bucket."
 }
 
-locals {
-  should_create_cert = var.route53 != null && var.route53.create_cert
-  cert_arn           = local.should_create_cert ? module.acm[0].acm_certificate_arn : var.cert_arn
-}
-
 resource "aws_cloudfront_distribution" "web_distro" {
   enabled         = true
   is_ipv6_enabled = true
@@ -24,7 +19,7 @@ resource "aws_cloudfront_distribution" "web_distro" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = local.cert_arn
+    acm_certificate_arn = var.cert_arn
     ssl_support_method  = "sni-only"
   }
 
