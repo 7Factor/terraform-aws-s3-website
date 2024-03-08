@@ -23,6 +23,13 @@ resource "aws_cloudfront_distribution" "web_distro" {
     }
   }
 
+  lifecycle {
+    precondition {
+      condition     = (var.route53 == null || var.route53.create_cert == false) && var.cert_arn == null
+      error_message = "You must provide a cert_arn if route53.create_cert is false."
+    }
+  }
+
   viewer_certificate {
     acm_certificate_arn = local.cert_arn
     ssl_support_method  = "sni-only"
