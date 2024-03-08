@@ -20,5 +20,5 @@ output "s3_bucket_name" {
 
 output "fqdn" {
   description = "The fqdn of the route53 record created. Only defined if you requested the creation of a route53 record."
-  value       = aws_route53_record.a_record[0].name
+  value       = one(aws_route53_record.a_record[*].name)
 }
