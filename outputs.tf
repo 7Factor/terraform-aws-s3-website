@@ -17,3 +17,8 @@ output "s3_bucket_name" {
   description = "The name of the bucket. Probably the same as the FQDN, but this so you're 100% sure to get the name."
   value       = aws_s3_bucket.web.bucket
 }
+
+output "fqdn" {
+  description = "The fqdn of the route53 record created. Only defined if you requested the creation of a route53 record."
+  value       = aws_route53_record.a_record[0].name
+}
