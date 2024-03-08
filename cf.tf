@@ -4,7 +4,7 @@ resource "aws_cloudfront_origin_access_identity" "access_id" {
 
 locals {
   should_create_cert = var.host_management.route53 != null && var.host_management.cert_arn == null
-  cert_arn           = coalesce(one(module.acm[*].acm_certificate_arn), var.host_management.cert_arn)
+  cert_arn           = should_create_cert ? one(module.acm[*].acm_certificate_arn) : var.host_management.cert_arn
 }
 
 resource "aws_cloudfront_distribution" "web_distro" {
