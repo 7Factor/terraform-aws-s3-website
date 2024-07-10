@@ -134,6 +134,6 @@ variable "allow_destroy_s3" {
 }
 
 variable "waf_web_acl_arn" {
-  description = "The ARN of the WAF Web ACL to associate with the cloudfront distribution. If you want to associate a WAF with the distribution you must provide this value. Do not use an AssociateWebACL"
-  default = ""
+  description = "The ARN of the WAF Web ACL to associate with the cloudfront distribution. If you want to associate a WAF with the distribution you must provide this value. Do not use an AssociateWebACL. Defaults to null."
+  default     = null
 }
