@@ -9,6 +9,8 @@ resource "aws_cloudfront_distribution" "web_distro" {
   default_root_object = var.default_root_object
   aliases             = var.origins
 
+  web_acl_id = var.waf_web_acl_arn
+
   origin {
     domain_name = aws_s3_bucket.web.bucket_regional_domain_name
     origin_id   = var.s3_origin_id
